@@ -1,0 +1,9 @@
+
+{
+  "name": "MedCoord AI - Israel Medical Tourism Bot Dashboard",
+  "description": "A comprehensive dashboard for managing and simulating a Telegram-based medical coordinator bot. It features real-time Gemini-powered anamnesis collection, document analysis, and multilingual history generation for Israeli medical tourism.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
