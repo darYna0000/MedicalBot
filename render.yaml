@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: med-tourism-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn bot_main:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: TELEGRAM_TOKEN
+        sync: false
+      - key: API_KEY
+        sync: false
+      - key: WEBHOOK_URL
+        sync: false
