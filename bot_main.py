@@ -19,10 +19,12 @@ if not API_KEY or not TELEGRAM_TOKEN:
 # Налаштування Gemini
 try:
     genai.configure(api_key=API_KEY)
-    # Використовуємо модель Flash (вона швидка і дешева)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    # ФІКС: Використовуємо правильну назву моделі
+    model = genai.GenerativeModel('gemini-1.5-flash-latest')  # ЗМІНИТИ ТУТ!
+    print(f"Gemini AI налаштовано успішно з моделлю: gemini-1.5-flash-latest")
 except Exception as e:
     print(f"Помилка налаштування Gemini: {e}")
+    model = None  # Щоб уникнути помилок подальшого використання
 
 # --- ФУНКЦІЇ БОТА ---
 async def start(update: Update, context):
@@ -30,6 +32,11 @@ async def start(update: Update, context):
 
 async def handle_message(update: Update, context):
     user_text = update.message.text
+    
+    # Перевірка чи Gemini налаштовано
+    if model is None:
+        await update.message.reply_text("⚠️ Помилка налаштування AI. Будь ласка, спробуйте пізніше.")
+        return
     
     # Показуємо користувачу, що бот "друкує" (щоб не думали, що завис)
     await update.message.chat.send_action(action="typing")
@@ -39,7 +46,7 @@ async def handle_message(update: Update, context):
         chat = model.start_chat(history=[])
         
         # Формуємо запит (Prompt)
-        prompt = f"Ти професійний медичний координатор в Ізраїлі. Клієнт пише: {user_text}. Дай коротку, чітку та корисну відповідь українською мовою."
+        prompt = f"Ти професійний медичний координатор в Ізраїлі. Клієнт пише: {user_text}. Дай коротку, чітку та корисну відповідь українською."
         
         response = chat.send_message(prompt)
         await update.message.reply_text(response.text)
